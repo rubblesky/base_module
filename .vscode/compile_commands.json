@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O0", "-g", "-o", "build/.objs/library/linux/x86_64/debug/src/library/linear.c.o", "src/library/linear.c"],
+  "file": "src/library/linear.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O0", "-g", "-o", "build/.objs/library/linux/x86_64/debug/src/library/test.c.o", "src/library/test.c"],
+  "file": "src/library/test.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/run.c.o", "run.c"],
+  "file": "run.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/src/library/linear.c.o", "src/library/linear.c"],
+  "file": "src/library/linear.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/src/library/test.c.o", "src/library/test.c"],
+  "file": "src/library/test.c"
+}]

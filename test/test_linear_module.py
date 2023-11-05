@@ -5,6 +5,7 @@ import torch
 class TestLinearModule(TestModule):
     def __init__(self,data):
 
+        c_data = [(d.data_ptr(),) for d in data]
 
         module = torch.load("./pth/LinearModule.pth")
         module.eval()
@@ -27,7 +28,7 @@ class TestLinearModule(TestModule):
         self.output = POINTER(c_float * 10)
 
         linear_module
-        super(TestLinearModule, self).__init__(data,module,c_module,c_test_func)
+        super(TestLinearModule, self).__init__(data,c_data,module,c_module,c_test_func)
     def diff(self):
         py_output = self.tests()
         c_output = self.c_tests()

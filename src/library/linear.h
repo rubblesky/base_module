@@ -1,3 +1,5 @@
+#ifndef LINEAR_H
+#define LINEAR_H
 typedef struct LinearModule
 {
     float * weight;
@@ -14,3 +16,5 @@ void * build_linear_module(char * path,int input_size,int output_size);
 float * test_linear_module(void* lm,float * input);
 
 void test_input(float * input,int input_size);
+int run_linear_test(int argc, char * argv[]);
+#endif

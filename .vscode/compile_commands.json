@@ -1,26 +1,46 @@
 [
 {
   "directory": "/home/xs/Code/Python/MachineLearning/base_module",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O0", "-g", "-o", "build/.objs/library/linux/x86_64/debug/src/library/linear.c.o", "src/library/linear.c"],
-  "file": "src/library/linear.c"
-},
-{
-  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O0", "-g", "-o", "build/.objs/library/linux/x86_64/debug/src/library/test.c.o", "src/library/test.c"],
-  "file": "src/library/test.c"
-},
-{
-  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/run.c.o", "run.c"],
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/test/linux/x86_64/release/run.c.o", "run.c"],
   "file": "run.c"
 },
 {
   "directory": "/home/xs/Code/Python/MachineLearning/base_module",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/src/library/linear.c.o", "src/library/linear.c"],
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/test/linux/x86_64/release/src/library/data.c.o", "src/library/data.c"],
+  "file": "src/library/data.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/test/linux/x86_64/release/src/library/linear.c.o", "src/library/linear.c"],
   "file": "src/library/linear.c"
 },
 {
   "directory": "/home/xs/Code/Python/MachineLearning/base_module",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-O0", "-g", "-o", "build/.objs/test/linux/x86_64/debug/src/library/test.c.o", "src/library/test.c"],
-  "file": "src/library/test.c"
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/test/linux/x86_64/release/src/library/op.c.o", "src/library/op.c"],
+  "file": "src/library/op.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/test/linux/x86_64/release/src/library/conv.c.o", "src/library/conv.c"],
+  "file": "src/library/conv.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/library/linux/x86_64/release/src/library/data.c.o", "src/library/data.c"],
+  "file": "src/library/data.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/library/linux/x86_64/release/src/library/linear.c.o", "src/library/linear.c"],
+  "file": "src/library/linear.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/library/linux/x86_64/release/src/library/op.c.o", "src/library/op.c"],
+  "file": "src/library/op.c"
+},
+{
+  "directory": "/home/xs/Code/Python/MachineLearning/base_module",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fPIC", "-O3", "-g", "-DNDEBUG", "-o", "build/.objs/library/linux/x86_64/release/src/library/conv.c.o", "src/library/conv.c"],
+  "file": "src/library/conv.c"
 }]

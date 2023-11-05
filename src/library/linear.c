@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "linear.h"
+#include "op.h"
 void matmul(float * output, float * x, float * weight, int m, int n);
 
 
@@ -41,19 +43,9 @@ void forward_linear_module(LinearModule * linear_module, float * input,float * o
     for (int i = 0; i < linear_module->output_size; i++) {
         output[i] += linear_module->bias[i];
     }
-    return output;
+
 }
 
-void matmul(float * output, float * x, float * weight, int m, int n){
-    // weight: m * n; x : n; output: m * 1
-    // assert output is zero initailly
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++){
-            output[i] += x[j] * weight[i * n + j];
-        }
-    }
-    return;
-}
 
 void * build_linear_module(char * path,int input_size,int output_size){
     LinearModule * linear_module = create_linear_module(input_size, output_size);
@@ -71,29 +63,29 @@ float * test_linear_module(void* lm,float * input){
 void free_output(float * p){
     free(p);
 }
-// int main(int argc, char * argv[]){
-//     char * path = "/home/xs/Code/Python/MachineLearning/base_module/bin/LinearModule.bin";
-//     int input_size = 5;
-//     int output_size = 10;
+int run_linear_test(int argc, char * argv[]){
+    char * path = "/home/xs/Code/Python/MachineLearning/base_module/bin/LinearModule.bin";
+    int input_size = 5;
+    int output_size = 10;
 
-//     LinearModule * linear_module = create_linear_module(input_size, output_size);
-//     load_linear_module(linear_module, path);
-//     float input[5] = {1.f,2.f,3.f,4.f,5.f};
-//     float * output = (float *) calloc(sizeof(float) , output_size);
-//     forward_linear_module(linear_module, input, output);
-//     for(int i = 0; i < input_size; i++){
-//         printf("%f ", input[i]);
-//     }
-//     printf("\n");
-//     for(int i = 0; i < output_size; i++){
-//         printf("%f ", output[i]);
-//     }
-//     printf("\n");
-//     // free(input);
-//     free(output);
-//     free_linear_module(linear_module);
-//     return 0;
-// }
+    LinearModule * linear_module = create_linear_module(input_size, output_size);
+    load_linear_module(linear_module, path);
+    float input[5] = {1.f,2.f,3.f,4.f,5.f};
+    float * output = (float *) calloc(sizeof(float) , output_size);
+    forward_linear_module(linear_module, input, output);
+    for(int i = 0; i < input_size; i++){
+        printf("%f ", input[i]);
+    }
+    printf("\n");
+    for(int i = 0; i < output_size; i++){
+        printf("%f ", output[i]);
+    }
+    printf("\n");
+    // free(input);
+    free(output);
+    free_linear_module(linear_module);
+    return 0;
+}
 
 void test_input(float * input,int input_size){
     for (int i = 0; i < input_size; i++){

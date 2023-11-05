@@ -1,9 +1,10 @@
-pth/*
-bin/*
-build/*
+pth/
+bin/
+build/
 __pycache__
 */__pycache__
 *.log
 *cache/
 *tmp/
 .xmake/
+data/

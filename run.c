@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc, char * argv[]){
+
+
     run_conv_test(argc,argv);
     return 0;
+    
 }
     // char * path = "/home/xs/Code/Python/MachineLearning/base_module/bin/LinearModule.bin";
     // int input_size = 5;

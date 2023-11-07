@@ -76,7 +76,7 @@ void conv_module_forward(ConvModule * module, float *input, float *output,int * 
                 for(int k2 = 0; k2 < module->kernel_size[1];k2++){
                     int x = in_x + k1;
                     int y = in_y + k2;
-                    if(x >= input_size[1] || y >= input_size[0] || x < 0 || y < 0) continue;
+                    if(x >= input_size[0] || y >= input_size[1] || x < 0 || y < 0) continue;
                     float * input_pos = input + (x * input_size[1] + y) * module->in_channels;
                     matmul(out_data, input_pos, module->conv_weights + k1 * module->kernel_size[1] + k2, module->out_channels,module->in_channels);
                     add(output_pos, out_data, module->out_channels);
@@ -184,8 +184,8 @@ int run_conv_test(int argc, char * argv[]){
     char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
 
     ConvModule * conv_module = build_conv_module(path);
-    float input[9] = {1,2,3,4,5,6,7,8,9};
-    int in_size[2] = {3,3};
+    float input[12] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    int in_size[2] = {3,4};
     int in_channels = 1;
     int out_size[2];
 

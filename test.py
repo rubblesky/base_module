@@ -10,8 +10,14 @@ test_Modules = dict(
 test = test_Modules[cfg.config['name']](cfg.config['data'])
 outputs = test.diff()
 print()
-# print(outputs)
-# for output in outputs:
-#     for o in output:
-#         if o > 0.0001:
-#             print(o)            
+
+import numpy as np
+for output in outputs:
+    output = np.array(output)
+    indices = np.where(output > 0.0001)
+    values = output[indices]
+    print("Indices:", indices)
+    print("Values:", values)
+
+
+         

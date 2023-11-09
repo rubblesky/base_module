@@ -1,7 +1,7 @@
 #include "op.h"
 void matmul(float * output, float * x, float * weight, int m, int n){
     // weight: m * n; x : n; output: m * 1
-    // assert output is zero initailly
+
     for(int i = 0;i < m;i++){
         output[i] = 0;
     }

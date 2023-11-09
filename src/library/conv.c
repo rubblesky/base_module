@@ -57,40 +57,69 @@ void free_conv_output(float * output){
     free(output);
 }
 void conv_module_forward(ConvModule * module, float *input, float *output,int * input_size,int * output_size){
-    // int input_x = input_size[0] + module->padding[0] * 2;   //padded height
-    // int input_y = input_size[1] + module->padding[1] * 2;   //padded width
 
 
-    float * out_data = calloc(sizeof(float),module->out_channels);
-    if(out_data == NULL){
-        perror("malloc out_data failed");
-        exit(-1);
-    }
-    for (int i = 0; i < output_size[0]; i++){
-        for(int j = 0; j < output_size[1]; j++){
-            int index = i * output_size[1] + j;
-            float * output_pos = output + (index) * module->out_channels;
-            int in_x = i * module->stride[0] - module->padding[0];  //top of kernel position in input
-            int in_y = j * module->stride[1] - module->padding[1];  //left of kernel position in input
-            for(int k1 = 0; k1 < module->kernel_size[0];k1++){
-                for(int k2 = 0; k2 < module->kernel_size[1];k2++){
-                    int x = in_x + k1;
-                    int y = in_y + k2;
-                    if(x >= input_size[0] || y >= input_size[1] || x < 0 || y < 0) continue;
-                    float * input_pos = input + (x * input_size[1] + y) * module->in_channels;
-                    matmul(out_data, input_pos, module->conv_weights + k1 * module->kernel_size[1] + k2, module->out_channels,module->in_channels);
-                    add(output_pos, out_data, module->out_channels);
+
+    for(int ic = 0;ic < module->in_channels;ic++){
+        float* input_cpos = input + ic * input_size[0] * input_size[1];
+        for(int oc = 0;oc < module->out_channels;oc++){
+            float * output_cpos = output + oc * output_size[0] * output_size[1];
+            float * weight_cpos = module->conv_weights + ic * module->out_channels * module->kernel_size[0] * module->kernel_size[1] + oc * module->kernel_size[0] * module->kernel_size[1];
+            float * bias_cpos = module->conv_bias + oc ;
+            for(int i = 0;i < output_size[0];i++){
+                for(int j = 0;j < output_size[1];j++){
+                    int in_x = i * module->stride[0] - module->padding[0];
+                    int in_y = j * module->stride[1] - module->padding[1];
+                    float * output_pos = output_cpos + i * output_size[1] + j;
+                    for(int k1 = 0; k1 < module->kernel_size[0];k1++){
+                        for(int k2 = 0; k2 < module->kernel_size[1];k2++){
+                            int x = in_x + k1;
+                            int y = in_y + k2;
+                            if(x < 0 || y < 0 || x >= input_size[0] || y >= input_size[1]) continue;
+                            *output_pos += weight_cpos [k1 * module->kernel_size[1] + k2] * input_cpos[x * input_size[1] + y];
+                            
+                        }
+                    }
+                    output_cpos[i * output_size[1] + j] += module->conv_bias[oc];
                 }
             }
-            add(output_pos, module->conv_bias, module->out_channels); //add bias
-
         }
     }
-    free(out_data);
+
     return;
 }
 
+// void conv_module_forward(ConvModule * module, float *input, float *output,int * input_size,int * output_size){
 
+
+//     float * out_data = calloc(sizeof(float),module->out_channels);
+//     if(out_data == NULL){
+//         perror("malloc out_data failed");
+//         exit(-1);
+//     }
+//     for (int i = 0; i < output_size[0]; i++){
+//         for(int j = 0; j < output_size[1]; j++){
+//             int index = i * output_size[1] + j;
+//             float * output_pos = output + (index) * module->out_channels;
+//             int in_x = i * module->stride[0] - module->padding[0];  //top of kernel position in input
+//             int in_y = j * module->stride[1] - module->padding[1];  //left of kernel position in input
+//             for(int k1 = 0; k1 < module->kernel_size[0];k1++){
+//                 for(int k2 = 0; k2 < module->kernel_size[1];k2++){
+//                     int x = in_x + k1;
+//                     int y = in_y + k2;
+//                     if(x >= input_size[0] || y >= input_size[1] || x < 0 || y < 0) continue;
+//                     float * input_pos = input + (x * input_size[1] + y) * module->in_channels;
+//                     matmul(out_data, input_pos, module->conv_weights + (k1 * module->kernel_size[1] + k2) * module->out_channels * module->in_channels, module->out_channels,module->in_channels);
+//                     add(output_pos, out_data, module->out_channels);
+//                 }
+//             }
+//             add(output_pos, module->conv_bias, module->out_channels); //add bias
+
+//         }
+//     }
+//     free(out_data);
+//     return;
+// }
 ConvModule *build_conv_module(char * path){
     FILE * fp = fopen(path, "rb");
     if (fp == NULL){
@@ -168,10 +197,10 @@ void print_output(float * output, int height, int width,int channels){
     printf("n = %d h = %d w = %d \n",n,height,width);
 }
 void print_output_channel(float * output, int height, int width,int channels){
-    for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++){
-            for(int k = 0; k < channels; k++){
-                printf("%1.1f ",output[i * width * channels + j * channels + k]);  
+    for(int k = 0; k < channels; k++){
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                    printf("%1.1f ",output[k * height * width + i * width + j]);  
             }
             printf("\n");
         }
@@ -184,17 +213,12 @@ int run_conv_test(int argc, char * argv[]){
     char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
 
     ConvModule * conv_module = build_conv_module(path);
-    float input[12] = {1,2,3,4,5,6,7,8,9,10,11,12};
-    int in_size[2] = {3,4};
-    int in_channels = 1;
+    float input[18] = {0,1,2,3,4,5,6,7,8};
+    int in_size[2] = {3,3};
     int out_size[2];
 
-    if(in_channels != conv_module->in_channels){
-        printf("error: in_channels != conv_module->in_channels\n");
-        exit(-1);
-    }
     float * output = create_conv_output(conv_module, in_size, out_size);
     conv_module_forward(conv_module, input, output,in_size,out_size);
-    print_output(output,out_size[0],out_size[1],conv_module->out_channels);
+    print_output_channel(output,out_size[0],out_size[1],conv_module->out_channels);
 
 }

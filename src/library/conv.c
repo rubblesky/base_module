@@ -60,12 +60,12 @@ void conv_module_forward(ConvModule * module, float *input, float *output,int * 
 
 
 
-    for(int ic = 0;ic < module->in_channels;ic++){
-        float* input_cpos = input + ic * input_size[0] * input_size[1];
-        for(int oc = 0;oc < module->out_channels;oc++){
-            float * output_cpos = output + oc * output_size[0] * output_size[1];
-            float * weight_cpos = module->conv_weights + ic * module->out_channels * module->kernel_size[0] * module->kernel_size[1] + oc * module->kernel_size[0] * module->kernel_size[1];
-            float * bias_cpos = module->conv_bias + oc ;
+    for(int oc = 0;oc < module->out_channels;oc++){
+        float * output_cpos = output + oc * output_size[0] * output_size[1];
+        for(int ic = 0;ic < module->in_channels;ic++){
+            float* input_cpos = input + ic * input_size[0] * input_size[1];
+            float * weight_cpos = module->conv_weights + oc * module->in_channels * module->kernel_size[0] * module->kernel_size[1] + ic * module->kernel_size[0] * module->kernel_size[1];
+            // float * bias_cpos = module->conv_bias + oc ;
             for(int i = 0;i < output_size[0];i++){
                 for(int j = 0;j < output_size[1];j++){
                     int in_x = i * module->stride[0] - module->padding[0];
@@ -80,8 +80,13 @@ void conv_module_forward(ConvModule * module, float *input, float *output,int * 
                             
                         }
                     }
-                    output_cpos[i * output_size[1] + j] += module->conv_bias[oc];
+                    // output_cpos[i * output_size[1] + j] += module->conv_bias[oc];//add two times
                 }
+            }
+        }
+        for (int i = 0;i < output_size[0];i++){
+            for(int j = 0;j < output_size[1];j++){
+                output_cpos[i * output_size[1] + j] += module->conv_bias[oc];
             }
         }
     }
@@ -210,10 +215,10 @@ void print_output_channel(float * output, int height, int width,int channels){
 
 
 int run_conv_test(int argc, char * argv[]){
-    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
+    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule_2.bin";
 
     ConvModule * conv_module = build_conv_module(path);
-    float input[18] = {0,1,2,3,4,5,6,7,8};
+    float input[18] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
     int in_size[2] = {3,3};
     int out_size[2];
 

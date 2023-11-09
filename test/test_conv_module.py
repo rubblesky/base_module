@@ -37,9 +37,9 @@ class TestConvModule(TestModule):
         for i,input in enumerate(self.data):
             diff = []
             c_output[i] = cast(c_output[i],POINTER(c_float *py_output[i].shape[2] * py_output[i].shape[1] * py_output[i].shape[0] ))
-            print("input: \n",input)
-            print("python output:\n",py_output[i])
-            print("c output:")
+            print("\033[1;32;40m input: \033[0m \n",input)
+            print("\033[1;32;40m python output:\033[0m \n ",py_output[i])
+            print("\033[1;32;40m c output: \033[0m")
             for l1 in range(py_output[i].shape[0]):
                 for l2 in range(py_output[i].shape[1]):
                     for l3 in range(py_output[i].shape[2]):

@@ -1,11 +1,12 @@
 #include "src/library/linear.h"
 #include "src/library/conv.h"
+#include "src/library/batchnorm.h"
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc, char * argv[]){
 
 
-    run_conv_test(argc,argv);
+    run_batchnorm_test(argc,argv);
     return 0;
     
 }

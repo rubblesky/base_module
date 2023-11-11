@@ -1,7 +1,7 @@
 
 import torch
 import struct
-from config._conv import configs
+from config._batchnorm import configs
 
 
 def serialize_fp32(file, tensor):
@@ -38,16 +38,29 @@ def export_conv(model,file):
     file.write(header)
     cw = model.conv.weight.view(-1)
     cb = model.conv.bias
-    bw = model.bn.weight.view(-1)
-    bb = model.bn.bias
+
     serialize_fp32(file, cw)    
     serialize_fp32(file, cb)
-    serialize_fp32(file, bw)    
-    serialize_fp32(file, bb)
+
+def export_batchnorm(model,file):
+    num_features = model.bn.num_features
+    eps = model.bn.eps
+    header = struct.pack(f'if',num_features,eps)
+    file.write(header)
+    w = model.bn.weight
+    b = model.bn.bias
+    m = model.bn.running_mean
+    v = model.bn.running_var
+    serialize_fp32(file,w)
+    serialize_fp32(file,b)
+    serialize_fp32(file,m)
+    serialize_fp32(file,v)
+
 
 functions = dict(
     LinearModule = export_linear,
-    ConvModule = export_conv
+    ConvModule = export_conv,
+    BatchNormModule = export_batchnorm,
     
 )
 if __name__ == "__main__":

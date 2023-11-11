@@ -1,2 +1,3 @@
 from .test_linear_module import TestLinearModule
 from .test_conv_module import TestConvModule
+from .test_batchnorm_module import TestBatchNormModule

@@ -21,8 +21,8 @@ class TestConvModule(TestModule):
         conv_module.test_conv_module.restype = POINTER(c_float)
         c_test_func = conv_module.test_conv_module
 
-        conv_module.free_linear_module.argtypes = [c_void_p]
-        self.free_c_module = conv_module.free_linear_module
+        conv_module.free_conv_module.argtypes = [c_void_p]
+        self.free_c_module = conv_module.free_conv_module
         
         conv_module.free_output.argtypes = [c_void_p]
         self.free_output = conv_module.free_output

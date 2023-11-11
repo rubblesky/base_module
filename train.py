@@ -1,6 +1,6 @@
 import torch
 from model import *
-from config._conv import configs
+from config._batchnorm import configs
 for cfg in configs:
     model = cfg['config']['module'](**cfg['config']['params'])
     model.train()

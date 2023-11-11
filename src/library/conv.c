@@ -23,8 +23,6 @@ ConvModule * create_conv_module(int in_channels,
     module->groups = groups;
     module->conv_weights = (float *)malloc(out_channels * in_channels * kernel_size[0] * kernel_size[1] * sizeof(float));
     module->conv_bias = (float *)malloc(out_channels * sizeof(float));
-    module->bn_weights = (float *)malloc(out_channels * sizeof(float));
-    module->bn_bias = (float *)malloc(out_channels * sizeof(float));
     return module;
 }
 
@@ -32,9 +30,7 @@ void load_conv_module(ConvModule * module, FILE *fp){
     int size = 0;
     size += fread(module->conv_weights, sizeof(float), module->out_channels * module->in_channels * module->kernel_size[0] * module->kernel_size[1], fp);
     size += fread(module->conv_bias, sizeof(float), module->out_channels, fp);
-    size += fread(module->bn_weights, sizeof(float), module->out_channels, fp);
-    size += fread(module->bn_bias, sizeof(float), module->out_channels, fp);
-    if(size != module->out_channels * module->in_channels * module->kernel_size[0] * module->kernel_size[1] + module->out_channels + module->out_channels + module->out_channels){
+    if(size != module->out_channels * module->in_channels * module->kernel_size[0] * module->kernel_size[1] + module->out_channels){
         printf("load conv module error\n");
         exit(-1);
     }
@@ -147,7 +143,7 @@ ConvModule *build_conv_module(char * path){
     size += fread(&groups, sizeof(int), 1, fp);
     if(size != 1 + 1 + 2 + 2 + 2 + 2 + 1){
         printf("Error: read file %s failed.\n", path);
-        exit(1);
+        exit(-1);
     }
     ConvModule * conv_module = create_conv_module(in_channels, out_channels, kernel_size, stride, padding, dilation, groups);
     load_conv_module(conv_module, fp);

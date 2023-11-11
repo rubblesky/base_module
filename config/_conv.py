@@ -3,10 +3,10 @@ import torch
 configs = [
     dict(
         test_data = [
-            #  torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.,10,11,12]).reshape(1,3,4), 
-             torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.]).reshape(1,3,3),
-            #  torch.randn(1,3,4),
-            #  torch.randn(1,4,5),
+            torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.,10,11,12]).reshape(1,3,4), 
+            torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.]).reshape(1,3,3),
+            torch.randn(1,3,4),
+            torch.randn(1,4,5),
              ],
         config = { 
             'name'      : 'ConvModule',
@@ -19,10 +19,10 @@ configs = [
     ),
     dict(
         test_data = [
-            torch.arange(18).float().reshape(2,3,3)
-            #  torch.randn(2,3,3),
-            #  torch.randn(2,3,4),
-            #  torch.randn(2,4,3),
+            torch.arange(18).float().reshape(2,3,3),
+            torch.randn(2,3,3),
+            torch.randn(2,3,4),
+            torch.randn(2,4,3),
              ],
         config = { 
             'name'      : 'ConvModule',
@@ -36,6 +36,8 @@ configs = [
     dict(
         test_data = [
             torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.]).reshape(1,3,3),
+            torch.randn(1,3,4),
+            torch.randn(1,4,3),
              ],
         config = { 
             'name'      : 'ConvModule',

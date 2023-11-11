@@ -1,11 +1,13 @@
 import numpy as np
 from test import TestLinearModule
 from test import TestConvModule
-# import config._linear as cfg
-from config._conv import configs
+from test import TestBatchNormModule
+
+from config._batchnorm import configs
 test_Modules = dict(
     LinearModule=TestLinearModule,
     ConvModule =TestConvModule,
+    BatchNormModule=TestBatchNormModule,
 )
 for i,cfg in enumerate(configs):
 

@@ -17,4 +17,34 @@ configs = [
             'loss'      : torch.nn.MSELoss(),
         }
     ),
+    dict(
+        test_data = [
+
+            torch.randn(1,5,3,4),
+            torch.randn(1,5,4,5),
+             ],
+        config = { 
+            'name'      : 'BatchNormModule',
+            'module'    : BatchNormModule,
+            'params'    : dict(num_features = 5),
+            'model_path': "pth/BatchNormModule_1.pth",
+            'bin_path'  : "bin/BatchNormModule_1.bin",
+            'loss'      : torch.nn.MSELoss(),
+        }
+    ),
+    dict(
+        test_data = [
+
+            torch.randn(1,10,30,4),
+            torch.randn(1,10,4,5),
+             ],
+        config = { 
+            'name'      : 'BatchNormModule',
+            'module'    : BatchNormModule,
+            'params'    : dict(num_features = 10),
+            'model_path': "pth/BatchNormModule_2.pth",
+            'bin_path'  : "bin/BatchNormModule_2.bin",
+            'loss'      : torch.nn.MSELoss(),
+        }
+    ),
 ]

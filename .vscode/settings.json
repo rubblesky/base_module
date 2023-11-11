@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "batchnorm.h": "c"
+        "batchnorm.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
     }
 }

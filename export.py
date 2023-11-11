@@ -56,11 +56,23 @@ def export_batchnorm(model,file):
     serialize_fp32(file,m)
     serialize_fp32(file,v)
 
+def export_layernorm(model,file):
+    # LayerNorm
+    normalized_shape = model.ln.normalized_shape
+    eps = model.ln.eps
+    header = struct.pack(f'if',normalized_shape,eps)
+    file.write(header)
+    w = model.ln.weight
+    b = model.ln.bias
+    serialize_fp32(file,w)
+    serialize_fp32(file,b)
+
 
 functions = dict(
     LinearModule = export_linear,
     ConvModule = export_conv,
     BatchNormModule = export_batchnorm,
+    LayerNormModule = export_layernorm,
     
 )
 if __name__ == "__main__":

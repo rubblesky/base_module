@@ -1,17 +1,21 @@
 import torch
+import torch.optim as optim
 from model import *
-from config._batchnorm import configs
+from config._layernorm import configs
 for cfg in configs:
+    
     model = cfg['config']['module'](**cfg['config']['params'])
+    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
     model.train()
     loss = cfg['config']['loss']
-    # for i in range(100):
-    #     input = torch.randn(5,5)
-    #     target = torch.concat((input,input * 2),dim=1)
-    #     output = model(input)
-    #     loss_value = loss(output,target)
-    #     loss_value.backward()
-    #     print(loss_value)
-    #     model.zero_grad()
+    if 'train_data' in cfg:
+        print("training  " + cfg['config']['name'])
+        for input,target in cfg['train_data']:
+            output = model(input)
+            loss_value = loss(output,target)
+            loss_value.backward()
+            optimizer.step()
+            # print(loss_value)
+            model.zero_grad()
     torch.save(model,cfg['config']['model_path'])
 

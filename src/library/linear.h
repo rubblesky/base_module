@@ -14,7 +14,7 @@ void load_linear_module(LinearModule * linear_module, FILE * fp);
 void free_linear_module(LinearModule * linear_module);
 void forward_linear_module(LinearModule * linear_module, Tensor * input,Tensor * output);
 
-void * build_linear_module(char * path);
+LinearModule * build_linear_module(char * path);
 Tensor * create_linear_output(LinearModule * module, Tensor * input);
 void free_linear_output(Tensor * output);
 float * test_linear_module(void* lm,float * input);

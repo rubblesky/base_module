@@ -46,7 +46,7 @@ void free_linear_output(Tensor * output){
     free_tensor(output);
 }
 
-void * build_linear_module(char * path){
+LinearModule * build_linear_module(char * path){
     FILE * fp = fopen(path,"rb");
     if (fp == NULL) {
         printf("Error: open file %s failed.\n", path);

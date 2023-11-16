@@ -6,7 +6,7 @@
 int main(int argc, char * argv[]){
 
 
-    run_linear_test(argc,argv);
+    run_conv_test(argc,argv);
     return 0;
     
 }

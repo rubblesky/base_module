@@ -4,4 +4,5 @@
     <option name="sdkName" value="mmlab" />
   </component>
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="mmlab" project-jdk-type="Python SDK" />
 </project>

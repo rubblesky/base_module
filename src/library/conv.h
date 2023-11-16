@@ -1,5 +1,6 @@
 #ifndef CONV_H
 #define CONV_H
+#include "tensor.h"
 #include<stdio.h>
 typedef struct {
     int in_channels;
@@ -23,12 +24,12 @@ ConvModule * create_conv_module(int in_channels,
                                 int groups);
 void load_conv_module(ConvModule * module, FILE *fp);
 void free_conv_module(ConvModule * module);
-float * create_conv_output(ConvModule * module, int *input_size,int *output_size);
-void free_conv_output(float * output);
-void conv_module_forward(ConvModule * module, float *input, float *output,int * input_size,int * output_size);
-
-
 ConvModule *build_conv_module(char * path);
-void * test_conv_module(ConvModule * conv_module, float * data,int height,int width);
+
+Tensor * create_conv_output(ConvModule * module, Tensor * input);
+void free_conv_output(Tensor * output);
+void forward_conv_module(ConvModule * module, Tensor *input, Tensor *output);
+
+
 int run_conv_test(int argc, char * argv[]);
 #endif

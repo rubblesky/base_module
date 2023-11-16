@@ -1,7 +1,7 @@
 
 import torch
 import struct
-from config._linear import configs
+from config._conv import configs
 
 
 def serialize_fp32(file, tensor):

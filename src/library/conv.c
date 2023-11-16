@@ -42,24 +42,28 @@ void free_conv_module(ConvModule * module){
     free(module->bn_bias);
     free(module);
 }
-float * create_conv_output(ConvModule * module, int *input_size,int *output_size){
-    // float output_size[2];
-    output_size[0] = (input_size[0] + module->padding[0] * 2 - module->kernel_size[0]) / module->stride[0] + 1;
-    output_size[1] = (input_size[1] + module->padding[1] * 2 - module->kernel_size[1]) / module->stride[1] + 1;
-    float * output = (float *)calloc(sizeof(float),output_size[0] * output_size[1] * module->out_channels);
+Tensor * create_conv_output(ConvModule * module, Tensor * input){
+    int input_size[2] = {input->shape[input->num_dim - 2],input->shape[input->num_dim - 1]};
+    int output_size[input->num_dim];
+    for(int i = 0; i < input->num_dim - 2;i++){
+        output_size[i] = input->shape[i];
+    }
+    output_size[input->num_dim - 2] = (input_size[0] + module->padding[0] * 2 - module->kernel_size[0]) / module->stride[0] + 1;
+    output_size[input->num_dim - 1] = (input_size[1] + module->padding[1] * 2 - module->kernel_size[1]) / module->stride[1] + 1;
+    Tensor * output = Tensor_init(input->num_dim,output_size);
     return output;
 }
-void free_conv_output(float * output){
-    free(output);
+void free_conv_output(Tensor * output){
+    free_tensor(output);
 }
-void conv_module_forward(ConvModule * module, float *input, float *output,int * input_size,int * output_size){
-
-
+void forward_conv_module(ConvModule * module, Tensor *input, Tensor *output){
+    int input_size[2] = {input->shape[input->num_dim - 2],input->shape[input->num_dim - 1]};
+    int output_size[2] = {output->shape[output->num_dim - 2],output->shape[output->num_dim - 1]};
 
     for(int oc = 0;oc < module->out_channels;oc++){
-        float * output_cpos = output + oc * output_size[0] * output_size[1];
+        float * output_cpos = output->data + oc * output_size[0] * output_size[1];
         for(int ic = 0;ic < module->in_channels;ic++){
-            float* input_cpos = input + ic * input_size[0] * input_size[1];
+            float* input_cpos = input->data + ic * input_size[0] * input_size[1];
             float * weight_cpos = module->conv_weights + oc * module->in_channels * module->kernel_size[0] * module->kernel_size[1] + ic * module->kernel_size[0] * module->kernel_size[1];
             // float * bias_cpos = module->conv_bias + oc ;
             for(int i = 0;i < output_size[0];i++){
@@ -151,75 +155,50 @@ ConvModule *build_conv_module(char * path){
     return conv_module;
 }
 
-void * test_conv_module(ConvModule * conv_module, float * data,int height,int width){
-    int in_size[2] = {height,width};
-    int out_size[2];
-    float * output = create_conv_output(conv_module, in_size, out_size);
-    if(output == NULL){
-        perror("create_conv_output");
-        exit(-1);
-    }
-    conv_module_forward(conv_module, data, output,in_size,out_size);
-    return output;
-}
-void print_output(float * output, int height, int width,int channels);
-// int run_conv_test(int argc, char * argv[]){
-//     char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
 
-//     ConvModule * conv_module = build_conv_module(path);
-//     ImgData *data = load_img_data("/home/xs/Code/Python/MachineLearning/base_module/data/test.bin");
-//     int in_size[2] = {data->height,data->width};
-//     int in_channels = data->channels;
-//     int out_size[2];
-//     // float * input = (float *)malloc(sizeof(float) * in_channels * in_size[0] * in_size[1]);
-//     if(in_channels != conv_module->in_channels){
-//         printf("error: in_channels != conv_module->in_channels\n");
-//         exit(-1);
-//     }
-//     float * output = create_conv_output(conv_module, in_size, out_size);
-//     conv_module_forward(conv_module, data->data, output,in_size,out_size);
-//     print_output(output,out_size[0],out_size[1],conv_module->out_channels);
 
-// }
-void print_output(float * output, int height, int width,int channels){
-    float sum = 0;
-    int n = 0;
-    for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++){
-            for(int k = 0; k < channels; k++){
-                sum += output[i * width * channels + j * channels + k];  
-            }
-            printf("%3.4f ",sum);
-            n++;
-            sum = 0;
-        }
-        printf("\n");
-    }
-    printf("n = %d h = %d w = %d \n",n,height,width);
-}
-void print_output_channel(float * output, int height, int width,int channels){
-    for(int k = 0; k < channels; k++){
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                    printf("%1.1f ",output[k * height * width + i * width + j]);  
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-}
+//void print_output(float * output, int height, int width,int channels){
+//    float sum = 0;
+//    int n = 0;
+//    for(int i = 0; i < height; i++){
+//        for(int j = 0; j < width; j++){
+//            for(int k = 0; k < channels; k++){
+//                sum += output[i * width * channels + j * channels + k];
+//            }
+//            printf("%3.4f ",sum);
+//            n++;
+//            sum = 0;
+//        }
+//        printf("\n");
+//    }
+//    printf("n = %d h = %d w = %d \n",n,height,width);
+//}
+//void print_output_channel(float * output, int height, int width,int channels){
+//    for(int k = 0; k < channels; k++){
+//        for(int i = 0; i < height; i++){
+//            for(int j = 0; j < width; j++){
+//                    printf("%1.1f ",output[k * height * width + i * width + j]);
+//            }
+//            printf("\n");
+//        }
+//        printf("\n");
+//    }
+//}
 
 
 int run_conv_test(int argc, char * argv[]){
-    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule_2.bin";
+    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
 
     ConvModule * conv_module = build_conv_module(path);
-    float input[18] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
-    int in_size[2] = {3,3};
-    int out_size[2];
+    float input_data[18] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
+    int in_size[3] = {1,3,4};
+    Tensor * input = Tensor_new(3,in_size,input_data);
 
-    float * output = create_conv_output(conv_module, in_size, out_size);
-    conv_module_forward(conv_module, input, output,in_size,out_size);
-    print_output_channel(output,out_size[0],out_size[1],conv_module->out_channels);
+
+    Tensor * output = create_conv_output(conv_module, input);
+    forward_conv_module(conv_module, input, output);
+    print_tensor(output);
+    free_conv_output(output);
+    free_conv_module(conv_module);
 
 }

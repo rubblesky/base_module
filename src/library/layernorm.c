@@ -57,7 +57,7 @@ LayerNormModule * build_layernorm_module(char * path){
     fclose(fp);
     return module;
 }
-void layernorm_module_forward(LayerNormModule * module,Tensor * input,Tensor * output){
+void forward_layernorm_module(LayerNormModule * module,Tensor * input,Tensor * output){
     if(input->num_features % module->num_features != 0){
         printf("Error: The number of features of the input must be divisible by the number of features of the module\n");
         exit(-1);

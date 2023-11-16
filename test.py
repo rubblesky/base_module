@@ -3,7 +3,8 @@ from test import TestLinearModule
 from test import TestConvModule
 from test import TestBatchNormModule
 
-from config._conv import configs
+from import_config import configs
+
 
 test_Modules = dict(
     LinearModule=TestLinearModule,

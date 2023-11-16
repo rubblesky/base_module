@@ -1,7 +1,9 @@
 import torch
 import torch.optim as optim
 from model import *
-from config._conv import configs
+
+from import_config import configs
+
 for cfg in configs:
     
     model = cfg['config']['module'](**cfg['config']['params'])

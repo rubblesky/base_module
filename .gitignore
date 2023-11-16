@@ -1,5 +1,5 @@
-pth/
-bin/
+pth/*
+bin/*
 build/
 __pycache__
 */__pycache__
@@ -8,4 +8,8 @@ __pycache__
 *tmp/
 .xmake/
 data/
+.idea
+.vscode
 cmake-build-debug/
+CMakeLists.txt
+

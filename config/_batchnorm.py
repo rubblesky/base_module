@@ -3,12 +3,13 @@ import torch
 configs = [
     dict(
         test_data = [
-            torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.,10,11,12]).reshape(1,1,3,4), 
+            torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.,10,11,12]).reshape(1,1,3,4),
             torch.tensor([1,2,3,4.,5.,6.,7.,8.,9.]).reshape(1,1,3,3),
             torch.randn(1,1,3,4),
             torch.randn(1,1,4,5),
              ],
-        config = { 
+        train_data = [(torch.randn(1,1,3,4),torch.randn(1,1,3,4)),],
+        config = {
             'name'      : 'BatchNormModule',
             'module'    : BatchNormModule,
             'params'    : dict(num_features = 1),
@@ -23,7 +24,8 @@ configs = [
             torch.randn(1,5,3,4),
             torch.randn(1,5,4,5),
              ],
-        config = { 
+        train_data = [(torch.randn(1,5,3,4),torch.randn(1,5,3,4)),],
+        config = {
             'name'      : 'BatchNormModule',
             'module'    : BatchNormModule,
             'params'    : dict(num_features = 5),
@@ -38,7 +40,8 @@ configs = [
             torch.randn(1,10,30,4),
             torch.randn(1,10,4,5),
              ],
-        config = { 
+        train_data = [(torch.randn(1,10,3,4),torch.randn(1,10,3,4)),],
+        config = {
             'name'      : 'BatchNormModule',
             'module'    : BatchNormModule,
             'params'    : dict(num_features = 10),

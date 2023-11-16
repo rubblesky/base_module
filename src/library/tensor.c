@@ -32,6 +32,16 @@ Tensor * Tensor_copy(Tensor * tensor){
     }
     return new_tensor;
 }
+Tensor * Tensor_like(Tensor * tensor){
+    Tensor * new_tensor =  malloc(sizeof(Tensor));
+    new_tensor->num_dim = tensor->num_dim;
+    new_tensor->num_features = tensor->num_features;
+    for(int i = 0;i < tensor->num_dim;i++){
+        new_tensor->shape[i] = tensor->shape[i];
+    }
+    new_tensor->data = malloc(sizeof(float) * tensor->num_features);
+    return new_tensor;
+}
 Tensor * Tensor_init(int num_dim,int shape[]){
     if(num_dim > MAX_DIM){
         printf("Error : dim must less than MAX_DIM, get %d\n",num_dim);

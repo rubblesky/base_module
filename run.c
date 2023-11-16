@@ -1,12 +1,13 @@
 #include "src/library/linear.h"
 #include "src/library/conv.h"
 #include "src/library/batchnorm.h"
+#include "src/library/layernorm.h"
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc, char * argv[]){
 
 
-    run_conv_test(argc,argv);
+    run_layernorm_test(argc,argv);
     return 0;
     
 }

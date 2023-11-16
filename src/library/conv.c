@@ -45,9 +45,10 @@ void free_conv_module(ConvModule * module){
 Tensor * create_conv_output(ConvModule * module, Tensor * input){
     int input_size[2] = {input->shape[input->num_dim - 2],input->shape[input->num_dim - 1]};
     int output_size[input->num_dim];
-    for(int i = 0; i < input->num_dim - 2;i++){
+    for(int i = 0; i < input->num_dim - 3;i++){
         output_size[i] = input->shape[i];
     }
+    output_size[input->num_dim - 3] = module->out_channels;
     output_size[input->num_dim - 2] = (input_size[0] + module->padding[0] * 2 - module->kernel_size[0]) / module->stride[0] + 1;
     output_size[input->num_dim - 1] = (input_size[1] + module->padding[1] * 2 - module->kernel_size[1]) / module->stride[1] + 1;
     Tensor * output = Tensor_init(input->num_dim,output_size);
@@ -187,7 +188,7 @@ ConvModule *build_conv_module(char * path){
 
 
 int run_conv_test(int argc, char * argv[]){
-    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule.bin";
+    char *path = "/home/xs/Code/Python/MachineLearning/base_module/bin/ConvModule_2.bin";
 
     ConvModule * conv_module = build_conv_module(path);
     float input_data[18] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};

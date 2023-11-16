@@ -10,6 +10,7 @@ class CTensor(Structure):
 
     _wrapper_ = [("data", POINTER(c_float))]
 
+
 class TestModule(object):
     """
     A test module to test the Ansible test runner.
@@ -51,7 +52,12 @@ class TestModule(object):
         self.output = [self.create_c_output(self.c_module, d) for d in self.c_data]
 
     def init_func(self):
-        pass
+        raise NotImplementedError
+        # self.build_c_module = None
+        # self.create_c_output = None
+        # self.free_c_output = None
+        # self.c_forward = None
+        # self.free_c_module = None
 
     def tests(self):
         outputs = []
@@ -81,4 +87,3 @@ class TestModule(object):
                 diff.append(abs(c - float(p)))
             diffs.append(diff)
         return diffs
-

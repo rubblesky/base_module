@@ -48,7 +48,7 @@ LayerNormModule * build_layernorm_module(char * path){
     size += fread(&dim,sizeof(int),1,fp);
     size += fread(&eps,sizeof(float),1,fp);
     size += fread(shape,sizeof(int),dim,fp);
-    if(size != 2 && dim < MAX_DIM){
+    if(size != 2 + dim && dim < MAX_DIM){
         printf("Error: read file %s failed.\n",path);
         exit(-1);
     }
@@ -63,15 +63,15 @@ void forward_layernorm_module(LayerNormModule * module,Tensor * input,Tensor * o
         exit(-1);
     }
     int len = input->num_features / module->num_features;
-    for(int i = input->num_dim - module->dim; i < input->num_dim;i--){
-        output->shape[i] = module->shape[i];
-        if(output->shape[i] != input->shape[i]){
-            printf("Error: The last %d dimensions of the input must be consistent with the dimensions of the module\n",module->dim);
-        }
-    }
-    for(int i = 0;i < input->num_dim - module->dim;i++){
-        output->shape[i] = input->shape[i];
-    }
+//    for(int i = input->num_dim - module->dim; i < input->num_dim;i--){
+//        output->shape[i] = module->shape[i];
+//        if(output->shape[i] != input->shape[i]){
+//            printf("Error: The last %d dimensions of the input must be consistent with the dimensions of the module\n",module->dim);
+//        }
+//    }
+//    for(int i = 0;i < input->num_dim - module->dim;i++){
+//        output->shape[i] = input->shape[i];
+//    }
     for(int i = 0;i < len;i++){
         float mean = 0;
         float vars = 0;
@@ -87,4 +87,23 @@ void forward_layernorm_module(LayerNormModule * module,Tensor * input,Tensor * o
             output->data[i * module->num_features + j] = (input->data[i * module->num_features + j] - mean) / sqrtf(vars + module->eps) * module->weight[j] + module->bias[j];
         }
     }
+}
+Tensor * create_layernorm_output(LayerNormModule * module, Tensor * input){
+    return Tensor_like(input);
+}
+void free_layernorm_output(Tensor *output){
+    free_tensor(output);
+}
+int run_layernorm_test(int argc, char * argv[]){
+    char * path = "/home/xs/Code/Python/MachineLearning/base_module/bin/LayerNormModule_2.bin";
+    LayerNormModule * module = build_layernorm_module(path);
+    float input_data[18] = {0,1,2,3,4,5,6,7,8, 9, 10, 11, 12};
+    int input_shape[3] = {1,2,3};
+    Tensor * input = Tensor_new(3,input_shape,input_data);
+    Tensor * output = create_layernorm_output(module,input);
+    forward_layernorm_module(module,input,output);
+    print_tensor(output);
+    free_layernorm_module(module);
+    free_tensor(input);
+    free_layernorm_output(output);
 }

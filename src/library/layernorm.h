@@ -3,7 +3,7 @@
 #include <stdio.h>
 #define MAX_DIM 10
 typedef struct LayerNormModule {
-    int dim,
+    int dim;
     int *shape;
     int num_features;
     float eps;
@@ -16,5 +16,8 @@ void load_layernorm_module(LayerNormModule *module,FILE *fp);
 void free_layernorm_module(LayerNormModule *module);
 
 LayerNormModule * build_layernorm_module(char * path);
+
+float * create_layernorm_output(LayerNormModule * module,int * input_size);
+
 
 #endif

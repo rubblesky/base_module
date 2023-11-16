@@ -1,7 +1,7 @@
 
 import torch
 import struct
-from config._batchnorm import configs
+from import_config import configs
 
 
 def serialize_fp32(file, tensor):
@@ -21,8 +21,12 @@ def export(model_path,bin_path,export_func):
 
 
 def export_linear(model,file):
+    in_features = model.linear.in_features
+    out_features = model.linear.out_features
     w = model.linear.weight.view(-1)
     b = model.linear.bias
+    header = struct.pack(f'{2}i',in_features,out_features)
+    file.write(header)
     serialize_fp32(file, w)    
     serialize_fp32(file, b)
 

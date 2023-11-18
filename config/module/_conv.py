@@ -1,6 +1,14 @@
 from model import *
 import torch
+from . import type
 
+functions = {
+    'build_c_module': 'build_conv_module',
+    'create_c_output': 'create_conv_output',
+    'free_c_output': 'free_conv_output',
+    'c_forward': 'forward_conv_module',
+    'free_c_module': 'free_conv_module',
+}
 configs = [
     dict(
         test_data=[
@@ -17,6 +25,8 @@ configs = [
             'model_path': "pth/ConvModule.pth",
             'bin_path': "bin/ConvModule.bin",
             'loss': torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -34,6 +44,8 @@ configs = [
             'model_path': "pth/ConvModule_2.pth",
             'bin_path': "bin/ConvModule_2.bin",
             'loss': torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -50,6 +62,8 @@ configs = [
             'model_path': "pth/ConvModule_3.pth",
             'bin_path': "bin/ConvModule_3.bin",
             'loss': torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -65,6 +79,8 @@ configs = [
             'model_path': "pth/ConvModule_4.pth",
             'bin_path': "bin/ConvModule_4.bin",
             'loss': torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
 ]

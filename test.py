@@ -1,24 +1,15 @@
 import numpy as np
-from test import TestLinearModule
-from test import TestConvModule
-from test import TestBatchNormModule
-from test import TestLayerNormModule
+from test import TestModule, TestFunction
+from import_config import configs,type
 
-from import_config import configs
-
-
-test_Modules = dict(
-    LinearModule=TestLinearModule,
-    ConvModule=TestConvModule,
-    BatchNormModule=TestBatchNormModule,
-    LayerNormModule=TestLayerNormModule,
-)
 total_num = 0
 for i, cfg in enumerate(configs):
 
     print("\033[1;31;40mTest \033[0m", i, ": " + cfg['config']['name'])
-    test = test_Modules[cfg['config']['name']](data=cfg['test_data'], model_path=cfg['config']['model_path'],
-                                               bin_path=cfg['config']['bin_path'], )
+    if type == 'module':
+        test = TestModule(cfg)
+    elif type == 'function':
+        test = TestFunction(cfg)
     outputs = test.diff()
 
     for output in outputs:

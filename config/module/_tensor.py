@@ -1,5 +1,6 @@
 from model import *
 import torch
+from . import type
 configs = [
     dict(
         test_data = [

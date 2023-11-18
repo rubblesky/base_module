@@ -1,4 +1,6 @@
-from .linear import LinearModule
-from .conv import ConvModule
-from .batchnorm import BatchNormModule
-from .layernorm import LayerNormModule
+from .module.linear import LinearModule
+from .module.conv import ConvModule
+from .module.batchnorm import BatchNormModule
+from .module.layernorm import LayerNormModule
+
+from .function.rule import ReluFunction

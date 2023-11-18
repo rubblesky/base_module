@@ -18,8 +18,3 @@ void add(float *output,float * input, int n){
     }
 }
 
-void relu(float * output,float * input,int n){
-    for (int i = 0; i < n;i++){
-        output[i] = input[i] > 0 ? input[i] : 0;
-    }
-}

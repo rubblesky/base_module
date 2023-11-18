@@ -1,5 +1,13 @@
 from model import *
 import torch
+from . import type
+functions = {
+    'build_c_module': 'build_batchnorm_module',
+    'create_c_output': 'create_batchnorm_output',
+    'free_c_output': 'free_batchnorm_output',
+    'c_forward': 'forward_batchnorm_module',
+    'free_c_module': 'free_batchnorm_module',
+}
 configs = [
     dict(
         test_data = [
@@ -16,6 +24,8 @@ configs = [
             'model_path': "pth/BatchNormModule.pth",
             'bin_path'  : "bin/BatchNormModule.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -32,6 +42,8 @@ configs = [
             'model_path': "pth/BatchNormModule_1.pth",
             'bin_path'  : "bin/BatchNormModule_1.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -48,6 +60,8 @@ configs = [
             'model_path': "pth/BatchNormModule_2.pth",
             'bin_path'  : "bin/BatchNormModule_2.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
 ]

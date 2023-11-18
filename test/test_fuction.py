@@ -1,6 +1,6 @@
 from ctypes import *
 import torch
-import model
+
 
 class CTensor(Structure):
     _fields_ = [("num_dim", c_int),
@@ -11,16 +11,14 @@ class CTensor(Structure):
     _wrapper_ = [("data", POINTER(c_float))]
 
 
-class TestModule(object):
+class TestFunction(object):
     """
     A test module to test the Ansible test runner.
     """
 
     def __init__(self, config):
-
         data = config['test_data']
-        model_path = config['config']['model_path']
-        bin_path = config['config']['bin_path']
+        model = config['config']['function']()
 
         self.lib = cdll.LoadLibrary('build/linux/x86_64/release/liblibrary.so')
         self.lib.Tensor_new.argtypes = [c_int, POINTER(c_int), c_void_p]
@@ -34,40 +32,21 @@ class TestModule(object):
         self.lib.print_tensor.argtypes = [c_void_p]
         self.print_tensor = self.lib.print_tensor
 
-        self.module = torch.load(model_path)
+        self.module = model
         self.data = data
         self.module.eval()
         self.c_data = [self.lib.Tensor_new(len(d.data.shape), (c_int * len(d.data.shape))(*d.data.shape), d.data_ptr())
                        for d in data]
 
-        self.build_c_module = getattr(self.lib, config['config']['functions']['build_c_module'])
-        self.create_c_output = getattr(self.lib, config['config']['functions']['create_c_output'])
-        self.free_c_output = getattr(self.lib, config['config']['functions']['free_c_output'])
-        self.c_forward = getattr(self.lib, config['config']['functions']['c_forward'])
-        self.free_c_module = getattr(self.lib, config['config']['functions']['free_c_module'])
-
-        self.build_c_module.argtypes = [c_char_p]
-        self.build_c_module.restype = c_void_p
-        self.c_module = self.build_c_module(c_char_p(bin_path.encode('utf-8')))
-
-        self.create_c_output.argtypes = [c_void_p, c_void_p]
-        self.create_c_output.restype = c_void_p
-
-        self.free_c_output.argtypes = [c_void_p]
-
-        self.c_forward.argtypes = [c_void_p, c_void_p, c_void_p]
-
-        self.free_c_module.argtypes = [c_void_p]
-
-        self.output = [self.create_c_output(self.c_module, d) for d in self.c_data]
+        self.c_forward = getattr(self.lib, config['config']['c_forward'].name)
+        self.c_forward.argtypes = config['config']['c_forward'].argtypes
+        self.c_forward.restype = config['config']['c_forward'].restype
 
     # def init_func(self):
-    # raise NotImplementedError
-    # self.build_c_module = None
-    # self.create_c_output = None
-    # self.free_c_output = None
-    # self.c_forward = None
-    # self.free_c_module = None
+    #     # raise NotImplementedError
+    #     self.c_forward = None
+    #     self.c_forward.argtypes = [c_void_p, ]
+    #     self.c_forward.restype = c_void_p
 
     def tests(self, forward_params=None):
         outputs = []
@@ -76,17 +55,15 @@ class TestModule(object):
                 outputs.append(self.module(test, **forward_params))
             else:
                 outputs.append(self.module(test))
-
         return outputs
 
     def c_tests(self, forward_params=None):
         outputs = []
-        for data, output in zip(self.c_data, self.output):
+        for data in self.c_data:
             if forward_params is not None:
-                self.c_forward(self.c_module, data, output, **forward_params)
+                self.c_forward(data, **forward_params)
             else:
-                self.c_forward(self.c_module, data, output)
-            outputs.append(output)
+                outputs.append(self.c_forward(data))
         return outputs
 
     def diff(self):

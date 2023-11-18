@@ -61,7 +61,7 @@ void free_tensor(Tensor * tensor){
     free(tensor->data);
     free(tensor);
 }
-void reshape(Tensor * tensor,int num_dim,int *shape){
+Tensor * reshape_(Tensor * tensor,int num_dim,int *shape){
     //assert all memory are congious
     if(num_dim > MAX_DIM){
         printf("Error : dim must less than MAX_DIM, get %d\n",num_dim);
@@ -71,6 +71,7 @@ void reshape(Tensor * tensor,int num_dim,int *shape){
     for(int i = 0;i < num_dim;i++){
         tensor->shape[i] = shape[i];
     }
+    return tensor;
 }
 Tensor * transpose(Tensor *tensor,int * dims, int num_dim){
     if (num_dim != tensor->num_dim){
@@ -96,7 +97,7 @@ Tensor * transpose(Tensor *tensor,int * dims, int num_dim){
     for(int i = 0;i < tensor->num_features;i++){
         s = i;
         p = 0;
-        for(int n = 0;n < dims;n++){
+        for(int n = 0;n < num_dim;n++){
             s = s / strides[n];
             p += s * strides[dims[n]];
             s = s % strides[n];
@@ -104,6 +105,16 @@ Tensor * transpose(Tensor *tensor,int * dims, int num_dim){
         transposed_data[p] = tensor->data[i];
     }
     return transposed_tensor;
+}
+
+Tensor * relu(Tensor * input){
+    Tensor * output = Tensor_copy(input);
+    for (int i = 0; i < output->num_features;i++){
+        if (output->data[i] < 0){
+            output->data[i] = 0;
+        }
+    }
+    return output;
 }
 
 void print_tensor(Tensor* tensor) {

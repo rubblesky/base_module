@@ -1,4 +1,3 @@
-from .test_linear_module import TestLinearModule
-from .test_conv_module import TestConvModule
-from .test_batchnorm_module import TestBatchNormModule
-from .test_layernorm_module import TestLayerNormModule
+from .test_module import TestModule
+from .test_fuction import TestFunction
+

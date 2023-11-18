@@ -1,1 +1,1 @@
-from config._layernorm import configs
+from config.function._rule import configs,type

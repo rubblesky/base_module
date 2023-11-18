@@ -1,5 +1,13 @@
 from model import *
 import torch
+from . import type
+functions = {
+    'build_c_module': 'build_layernorm_module',
+    'create_c_output': 'create_layernorm_output',
+    'free_c_output': 'free_layernorm_output',
+    'c_forward': 'forward_layernorm_module',
+    'free_c_module': 'free_layernorm_module',
+}
 configs = [
     dict(
         test_data = [
@@ -14,6 +22,8 @@ configs = [
             'model_path': "pth/LayerNormModule.pth",
             'bin_path'  : "bin/LayerNormModule.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -32,6 +42,8 @@ configs = [
             'model_path': "pth/LayerNormModule_1.pth",
             'bin_path'  : "bin/LayerNormModule_1.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
     dict(
@@ -50,6 +62,8 @@ configs = [
             'model_path': "pth/LayerNormModule_2.pth",
             'bin_path'  : "bin/LayerNormModule_2.bin",
             'loss'      : torch.nn.MSELoss(),
+            'functions': functions,
+            'forward_params': dict(),
         }
     ),
 ]

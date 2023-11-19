@@ -1,6 +1,6 @@
 import torch
 import struct
-from import_config import configs
+from import_config import configs, type
 
 
 def serialize_fp32(file, tensor):
@@ -83,5 +83,6 @@ functions = dict(
 
 )
 if __name__ == "__main__":
-    for cfg in configs:
-        export(cfg['config']['model_path'], cfg['config']['bin_path'], functions[cfg['config']['name']])
+    if type == 'module':
+        for cfg in configs:
+            export(cfg['config']['model_path'], cfg['config']['bin_path'], functions[cfg['config']['name']])

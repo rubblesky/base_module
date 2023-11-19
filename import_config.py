@@ -1,1 +1,1 @@
-from config.function._rule import configs,type
+from config.function._permute import configs,type

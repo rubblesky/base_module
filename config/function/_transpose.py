@@ -13,12 +13,12 @@ configs = [
             torch.randn(1, 1, 4, 5),
         ],
         config={
-            'name': 'ReluFunction',
-            'function': ReluFunction,
+            'name': 'TransposeFunction',
+            'function': TransposeFunction,
             'params': dict(inplace=False),
-            'c_forward': CFuntion(name='relu',argtypes=[c_void_p,],restype=c_void_p),
-            'forward_params': None,
-            'c_forward_params': None,
+            'c_forward': CFuntion(name='transpose',argtypes=[c_void_p,c_int,c_int],restype=c_void_p),
+            'forward_params': ((1, 0),),
+            'c_forward_params': (1, 0),
         }
     ),
 ]

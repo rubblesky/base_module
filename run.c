@@ -4,10 +4,9 @@
 #include "src/library/layernorm.h"
 #include <stdio.h>
 #include <stdlib.h>
+int run_permute_test(int argc, char * argv[]);
 int main(int argc, char * argv[]){
-
-
-    run_layernorm_test(argc,argv);
+    run_permute_test(argc,argv);
     return 0;
     
 }

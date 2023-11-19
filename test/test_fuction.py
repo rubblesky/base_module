@@ -20,6 +20,8 @@ class TestFunction(object):
         data = config['test_data']
         model = config['config']['function']()
 
+        self.config = config
+
         self.lib = cdll.LoadLibrary('build/linux/x86_64/release/liblibrary.so')
         self.lib.Tensor_new.argtypes = [c_int, POINTER(c_int), c_void_p]
         self.lib.Tensor_new.restype = c_void_p
@@ -52,7 +54,7 @@ class TestFunction(object):
         outputs = []
         for test in self.data:
             if forward_params is not None:
-                outputs.append(self.module(test, **forward_params))
+                outputs.append(self.module(test, *forward_params))
             else:
                 outputs.append(self.module(test))
         return outputs
@@ -61,14 +63,14 @@ class TestFunction(object):
         outputs = []
         for data in self.c_data:
             if forward_params is not None:
-                self.c_forward(data, **forward_params)
+                outputs.append(self.c_forward(data, *forward_params))
             else:
                 outputs.append(self.c_forward(data))
         return outputs
 
     def diff(self):
-        py_output = self.tests()
-        c_output = self.c_tests()
+        py_output = self.tests(self.config['config']['forward_params'])
+        c_output = self.c_tests(self.config['config']['c_forward_params'])
         diffs = []
         for i, data in enumerate(self.data):
             diff = []

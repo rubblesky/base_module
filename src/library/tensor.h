@@ -13,8 +13,9 @@ Tensor * Tensor_copy(Tensor * tensor);
 Tensor * Tensor_like(Tensor * tensor);
 Tensor * Tensor_init(int num_dim,int shape[]);
 void free_tensor(Tensor * tensor);
-void reshape(Tensor * tensor,int num_dim,int *shape);
-Tensor * transpose(Tensor *tensor,int * dims, int num_dim);
+Tensor * reshape_(Tensor * tensor,int num_dim,int *shape);
+Tensor * permute(Tensor *tensor,int * dims, int num_dim);
 
 void print_tensor(Tensor * tensor);
+
 #endif

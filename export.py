@@ -33,7 +33,7 @@ def export_conv(model, file):
     in_channels = model.conv.in_channels
     out_channels = model.conv.out_channels
     kernel_size = model.conv.kernel_size if len(model.conv.kernel_size) == 2 else (
-    model.conv.kernel_size, model.conv.kernel_size)
+        model.conv.kernel_size, model.conv.kernel_size)
     stride = model.conv.stride if len(model.conv.stride) == 2 else (model.conv.stride, model.conv.stride)
     padding = model.conv.padding if len(model.conv.padding) == 2 else (model.conv.padding, model.conv.padding)
     dilation = model.conv.dilation if len(model.conv.dilation) == 2 else (model.conv.dilation, model.conv.dilation)
@@ -75,11 +75,23 @@ def export_layernorm(model, file):
     serialize_fp32(file, b)
 
 
+def export_pooling(model, file):
+    kernel_size = model.pooling.kernel_size if len(model.pooling.kernel_size) == 2 else (
+        model.pooling.kernel_size, model.pooling.kernel_size)
+    stride = model.pooling.stride if len(model.pooling.stride) == 2 else (model.pooling.stride, model.pooling.stride)
+    padding = model.pooling.padding if len(model.pooling.padding) == 2 else (model.pooling.padding, model.pooling.padding)
+
+    header = struct.pack(f'{6}i', kernel_size[0], kernel_size[1], stride[0], stride[1],
+                         padding[0], padding[1])
+    file.write(header)
+
+
 functions = dict(
     LinearModule=export_linear,
     ConvModule=export_conv,
     BatchNormModule=export_batchnorm,
     LayerNormModule=export_layernorm,
+    PoolingModule=export_pooling,
 
 )
 if __name__ == "__main__":

@@ -16,6 +16,17 @@ void free_tensor(Tensor * tensor);
 Tensor * reshape_(Tensor * tensor,int num_dim,int *shape);
 Tensor * permute(Tensor *tensor,int * dims, int num_dim);
 
+Tensor * relu(Tensor * input);
+
 void print_tensor(Tensor * tensor);
 
+typedef struct TensorList{
+    int num_tensor;
+    int len;
+    Tensor ** list;
+}TensorList;
+TensorList * TensorList_new(int base_num);
+TensorList * append_tensor(TensorList * tensor_list,Tensor * tensor);
+void freeTensorList(TensorList * tensor_list);
+Tensor * get_tensor(TensorList * tensor_list,int id);
 #endif

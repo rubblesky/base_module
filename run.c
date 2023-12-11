@@ -6,7 +6,7 @@
 #include <stdlib.h>
 int run_permute_test(int argc, char * argv[]);
 int main(int argc, char * argv[]){
-    run_permute_test(argc,argv);
+    run_conv_test(argc,argv);
     return 0;
     
 }

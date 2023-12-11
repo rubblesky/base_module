@@ -50,7 +50,7 @@ LinearModule * build_linear_module(char * path){
     FILE * fp = fopen(path,"rb");
     if (fp == NULL) {
         printf("Error: open file %s failed.\n", path);
-        exit(1);
+        exit(-1);
     }
     int in_features,out_features;
     int size = 0;

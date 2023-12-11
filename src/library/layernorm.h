@@ -12,7 +12,7 @@ typedef struct LayerNormModule {
     float *bias;
 }LayerNormModule;
 
-//LayerNormModule * create_layernorm_module(int dim,int shape[],float eps);
+LayerNormModule * create_layernorm_module(int dim,int shape[],float eps);
 //void load_layernorm_module(LayerNormModule *module,FILE *fp);
 
 LayerNormModule * build_layernorm_module(char * path);

@@ -84,7 +84,9 @@ void forward_vision_module(VisionEncoder * module,Tensor * input, Tensor * outpu
     conv1_output = reshape_(conv1_output,3,reshape_size);
     int permute_dims[3] = {1,0,2};
     Tensor * conv1_output_permute = permute(conv1_output,permute_dims,3); // new
-
+    int zero_shape[3] = {conv1_output_permute->shape[0],1,conv1_output_permute->shape[conv1_output_permute->num_dim-1]};
+    Tensor * zero = Tensor_init(3,zero_shape); //new
+    Tensor * cat_output = cat(module->class_embedding,conv1_output_permute,1);
 
 
 

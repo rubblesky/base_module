@@ -2,7 +2,7 @@
 #define CLIP_VISION_H
 #include "../library/module.h"
 typedef Module PositionalEmbedding;
-typedef Module ClassEmbedding;
+typedef Tensor ClassEmbedding;
 typedef ModuleList Transformer;
 
 typedef struct VisionEncoder{

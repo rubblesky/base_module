@@ -12,9 +12,9 @@ void matmul(float * output, float * x, float * weight, int m, int n){
     }
     return;
 }
-void add(float *output,float * input, int n){
-    for (int i = 0; i < n; i++){
-        output[i] += input[i];
-    }
-}
+//void add(float *output,float * input, int n){
+//    for (int i = 0; i < n; i++){
+//        output[i] += input[i];
+//    }
+//}
 

@@ -1,7 +1,7 @@
 #ifndef CLIP_VISION_H
 #define CLIP_VISION_H
 #include "../library/module.h"
-typedef Module PositionalEmbedding;
+typedef Tensor PositionalEmbedding;
 typedef Tensor ClassEmbedding;
 typedef ModuleList Transformer;
 
@@ -35,6 +35,10 @@ typedef struct VisionTransformerLayer{
 
 VisionTransformerLayer * create_vision_transformer_layer(int in_channel,int out_channel,int d_model,int num_head);
 void free_transformer_layer(VisionTransformerLayer * vlt);
+void forward_transformer_layer(VisionTransformerLayer * module,Tensor * input,Tensor * output);
+Tensor * create_transformer_layer_output(VisionTransformerLayer * module, Tensor * input);
+void free_transformer_layer_output(Tensor * output);
 
+int run_transformer_layer_test(int argc, char * argv[]);
 void forward_vision_module(VisionEncoder * module,Tensor * input, Tensor * output);
 #endif //CLIP_VISION_H

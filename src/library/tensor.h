@@ -16,7 +16,7 @@ void free_tensor(Tensor * tensor);
 Tensor * reshape_(Tensor * tensor,int num_dim,int *shape);
 Tensor * permute(Tensor *tensor,int * dims, int num_dim);
 Tensor * cat(Tensor * t1,Tensor * t2,int dim);
-
+Tensor * add(Tensor * t1,Tensor * t2);
 Tensor * relu(Tensor * input);
 
 void print_tensor(Tensor * tensor);

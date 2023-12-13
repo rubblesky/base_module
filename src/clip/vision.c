@@ -52,11 +52,12 @@ void free_transformer_layer(VisionTransformerLayer * vlt){
     free(vlt);
 }
 
-void forward_transformerlayer_module(VisionTransformerLayer *vtl,Tensor * input,Tensor * output){
+void forward_transformer_layer(VisionTransformerLayer *vtl,Tensor * input,Tensor * output){
 
     int bsz = input->shape[0];
     int len_q = input->shape[1];
     int len_kv = input->shape[1];
+    int embed_dim = input->shape[2];
     int head_dim = input->shape[2] / vtl->num_head;
     //assert (input->shape[2] % vlt->num_head) == 0
     if(vtl->ln1_output == NULL){
@@ -67,8 +68,12 @@ void forward_transformerlayer_module(VisionTransformerLayer *vtl,Tensor * input,
     }
 
 
+
+
     vtl->ln1->forward(vtl->ln1,input,vtl->ln1_output);
     vtl->in_proj->forward(vtl->in_proj,vtl->ln1_output,vtl->in_proj_output);
+    int shape[MAX_DIM] = {bsz,len_q,3,embed_dim};
+    vtl->in_proj_output = reshape_(vtl->in_proj_output,4,shape);
 
 
 }
@@ -86,7 +91,16 @@ void forward_vision_module(VisionEncoder * module,Tensor * input, Tensor * outpu
     Tensor * conv1_output_permute = permute(conv1_output,permute_dims,3); // new
     int zero_shape[3] = {conv1_output_permute->shape[0],1,conv1_output_permute->shape[conv1_output_permute->num_dim-1]};
     Tensor * zero = Tensor_init(3,zero_shape); //new
-    Tensor * cat_output = cat(module->class_embedding,conv1_output_permute,1);
+    Tensor * class_embedding = add(module->class_embedding,zero);   //new
+    Tensor * cat_output = cat(class_embedding,conv1_output_permute,1); // new
+    Tensor * embedding = add(module->positional_embedding,cat_output); //new
+    Tensor * in_pre_output = module->ln_pre->create_output(module->ln_pre,embedding); //new
+    module->ln_pre->forward(module->ln_pre,embedding,in_pre_output);
+    //Tensor *  embedding_permute = permute(embedding,permute_dims,3); //new we do not need it because we choose batch_first=True
+
+    module->transformer; //TODO
+
+
 
 
 

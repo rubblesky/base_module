@@ -220,6 +220,40 @@ Tensor * add(Tensor * t1,Tensor * t2){
     }
     return result;
 }
+Tensor * slice(Tensor * t,int start[],int end[],int dim){
+    if(dim!=t->num_dim){
+        return NULL;
+    }
+    int shape[MAX_DIM] = {0};
+    int num_features = 0;
+    for(int i = 0;i < dim ;i++){
+        shape[i] = end[i] - start[i];
+        num_features *= shape[i];
+        num_features += end[i] - start[i];
+    }
+    Tensor * result = Tensor_init(dim,shape);
+    int index[MAX_DIM] = {0};
+    int origin_index[MAX_DIM];
+    for(int i = 0;i < dim;i++){
+        origin_index[i] = start[i];
+    }
+
+    for(int i = 0;i < num_features;i++,index[dim-1]++,origin_index[dim-1]++){
+        for(int j = dim - 1;index[j] >= shape[j] && j > 0;j--){
+            index[j - 1]++;
+            index[j] = 0;
+            origin_index[j - 1] = index[j - 1] + start[j - 1];
+            origin_index[j] = index[j] + start[j];
+        }
+        int origin = 0;
+        for(int k = 0;k < dim;k++){
+            origin *= t->shape[i];
+            origin += origin_index[i];
+        }
+        result->data[i] = t->data[origin];
+    }
+    return result;
+}
 //int * tensor_iterators(Tensor * t,int i,int index[]){
 //    for(int j = t->num_dim - 1;index[j] >= t->shape[j] && j > 0;j--){
 //        index[j] = 0;

@@ -37,8 +37,10 @@ class TestFunction(object):
         self.module = model
         self.data = data
         self.module.eval()
+
         self.c_data = [self.lib.Tensor_new(len(d.data.shape), (c_int * len(d.data.shape))(*d.data.shape), d.data_ptr())
                        for d in data]
+
 
         self.c_forward = getattr(self.lib, config['config']['c_forward'].name)
         self.c_forward.argtypes = config['config']['c_forward'].argtypes
@@ -52,20 +54,27 @@ class TestFunction(object):
 
     def tests(self, forward_params=None):
         outputs = []
+
         for test in self.data:
             if forward_params is not None:
                 outputs.append(self.module(test, *forward_params))
             else:
                 outputs.append(self.module(test))
+
         return outputs
 
     def c_tests(self, forward_params=None):
+        if forward_params is not None:
+            forward_params = tuple(self.lib.Tensor_new(len(p.data.shape), (c_int * len(p.data.shape))(*p.data.shape),
+                                                       p.data_ptr()) if type(p) == torch.Tensor else p for p in
+                                   forward_params)
         outputs = []
         for data in self.c_data:
             if forward_params is not None:
                 outputs.append(self.c_forward(data, *forward_params))
             else:
                 outputs.append(self.c_forward(data))
+
         return outputs
 
     def diff(self):

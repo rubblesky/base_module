@@ -7,4 +7,6 @@ from .module.pooling import MaxPoolingModule
 from .function.rule import ReluFunction
 from .function.transpose import TransposeFunction
 from .function.permute import PermuteFunction
+from .function.add import AddFunction
+from .function.cat import CatFunction
 

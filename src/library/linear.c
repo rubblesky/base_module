@@ -26,8 +26,8 @@ void free_linear_module(LinearModule * linear_module) {
     free(linear_module);
 }
 void forward_linear_module(LinearModule * module, Tensor * input,Tensor * output) {
-    matmul(output->data, input->data, module->weight, module->out_features, module->in_features);
-    add(output->data,module->bias, module->out_features);
+    float_matmul(output->data, input->data, module->weight, module->out_features, module->in_features);
+    float_add(output->data,module->bias, module->out_features);
 }
 
 Tensor * create_linear_output(LinearModule * module, Tensor * input){

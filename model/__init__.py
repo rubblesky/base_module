@@ -9,4 +9,5 @@ from .function.transpose import TransposeFunction
 from .function.permute import PermuteFunction
 from .function.add import AddFunction
 from .function.cat import CatFunction
+from .function.slice import SliceFunction
 

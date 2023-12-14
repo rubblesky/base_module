@@ -225,11 +225,10 @@ Tensor * slice(Tensor * t,int start[],int end[],int dim){
         return NULL;
     }
     int shape[MAX_DIM] = {0};
-    int num_features = 0;
+    int num_features = 1;
     for(int i = 0;i < dim ;i++){
         shape[i] = end[i] - start[i];
         num_features *= shape[i];
-        num_features += end[i] - start[i];
     }
     Tensor * result = Tensor_init(dim,shape);
     int index[MAX_DIM] = {0};
@@ -247,8 +246,8 @@ Tensor * slice(Tensor * t,int start[],int end[],int dim){
         }
         int origin = 0;
         for(int k = 0;k < dim;k++){
-            origin *= t->shape[i];
-            origin += origin_index[i];
+            origin *= t->shape[k];
+            origin += origin_index[k];
         }
         result->data[i] = t->data[origin];
     }
@@ -377,5 +376,18 @@ int run_add_test(int argc, char * argv[]){
     print_tensor(output);
     free_tensor(input1);
     free_tensor(input2);
+    free_tensor(output);
+}
+int run_slice_test(int argc, char * argv[]){
+    float input_data[18] = {0,1,2,3,4,5,6,7,8, 9, 10, 11, 12};
+    int input_shape[3] = {2,2,3};
+    int start[3] = {0,0,0};
+    int end[3] = {1,2,3};
+    Tensor * input = Tensor_new(3,input_shape,input_data);
+    Tensor * output = slice(input,start,end,3);
+    print_tensor(input);
+    printf("\n");
+    print_tensor(output);
+    free_tensor(input);
     free_tensor(output);
 }

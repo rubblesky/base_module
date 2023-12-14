@@ -4,9 +4,9 @@
 #include "src/library/layernorm.h"
 #include <stdio.h>
 #include <stdlib.h>
-int run_add_test(int argc, char * argv[]);
+int run_slice_test(int argc, char * argv[]);
 int main(int argc, char * argv[]){
-    run_add_test(argc,argv);
+    run_slice_test(argc,argv);
     return 0;
     
 }

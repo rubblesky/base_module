@@ -17,6 +17,8 @@ Tensor * reshape_(Tensor * tensor,int num_dim,int *shape);
 Tensor * permute(Tensor *tensor,int * dims, int num_dim);
 Tensor * cat(Tensor * t1,Tensor * t2,int dim);
 Tensor * add(Tensor * t1,Tensor * t2);
+Tensor * slice(Tensor * t,int start[],int end[],int dim);
+
 Tensor * relu(Tensor * input);
 
 void print_tensor(Tensor * tensor);

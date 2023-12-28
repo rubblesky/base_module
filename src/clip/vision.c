@@ -74,7 +74,16 @@ void forward_transformer_layer(VisionTransformerLayer *vtl,Tensor * input,Tensor
     vtl->in_proj->forward(vtl->in_proj,vtl->ln1_output,vtl->in_proj_output);
     int shape[MAX_DIM] = {bsz,len_q,3,embed_dim};
     vtl->in_proj_output = reshape_(vtl->in_proj_output,4,shape);
-
+    int start[4] = {0};
+    int end[4] = {bsz,len_q,1,embed_dim};
+    shape[2] = embed_dim;
+    vtl->in_proj_q = reshape_(slice(vtl->in_proj_output,start,end,4),3,shape);
+    start[2] = end[2];
+    end[2]++;
+    vtl->in_proj_k = reshape_(slice(vtl->in_proj_output,start,end,4),3,shape);
+    start[2] = end[2];
+    end[2]++;
+    vtl->in_proj_v = reshape_(slice(vtl->in_proj_output,start,end,4),3,shape);
 
 }
 

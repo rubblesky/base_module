@@ -74,6 +74,38 @@ Tensor * reshape_(Tensor * tensor,int num_dim,int *shape){
     }
     return tensor;
 }
+Tensor * squeeze_(Tensor * tensor, int n){
+    if(n < tensor->num_dim && tensor->shape[n] == 1){
+        int new_shape[MAX_DIM];
+        int *ns = new_shape;
+        for(int i = 0;i < tensor->num_dim;i++){
+            if(i == n){
+                continue;
+            } else{
+                *ns = tensor->shape[i];
+            }
+        }
+        return  reshape_(tensor,tensor->num_dim - 1,new_shape);
+    } else{
+        return NULL;
+    }
+}
+Tensor * unsqueeze_(Tensor * tensor, int n){
+    if(n <= tensor->num_dim  && n >= 0){
+        int new_shape[MAX_DIM];
+        int *ns = new_shape;
+        for(int i = 0;i < tensor->num_dim;i++){
+            if(i == n){
+                *ns = 1;
+            } else{
+                *ns = tensor->shape[i];
+            }
+        }
+        return  reshape_(tensor,tensor->num_dim + 1,new_shape);
+    } else{
+        return NULL;
+    }
+}
 Tensor * permute(Tensor *tensor,int * dims, int num_dim){
     if (num_dim != tensor->num_dim){
         printf("Error: num_dim in transpose must be consistent with tensor->num_dim, get %d but tensor->num_dim = %d\n",num_dim,tensor->num_dim);
@@ -219,6 +251,52 @@ Tensor * add(Tensor * t1,Tensor * t2){
 
     }
     return result;
+}
+Tensor * matmul(Tensor * t1, Tensor * t2){
+    int n1 = t1->num_dim - 1;
+    int d1 = t1->shape[n1];
+    int n2 = t2->num_dim <= 2 ? 0:t2->num_dim - 2;
+    int d2 = t2->shape[n2];
+    if(d1 != d2){return NULL;}
+    else{
+        int num_dim = t1->num_dim + t2->num_dim -2;
+        int shape[MAX_DIM];
+        int *s = shape;
+        for(int i = 0; i < n1;i++,s++){
+            *s = t1->shape[i];
+        }
+        for(int i = n1 + 1;i < t2->num_dim;i++,s++){
+            *s = t2->shape[i];
+        }
+        Tensor * result = Tensor_init(num_dim,shape);
+
+        int index[MAX_DIM] = {0};
+        for(int i = 0;i < result->num_features;i++,index[result->num_dim - 1]++) {
+            for (int j = result->num_dim - 1; index[j] >= shape[j] && j > 0; j--) {
+                index[j] = 0;
+                index[j - 1]++;
+            }
+
+            for(int k = 0;k < d1;k++){
+                int m1 = 0;
+                for(int l1 = 0;l1 < t1->num_dim -1;l1++){
+                    m1 += index[l1] * t1->shape[l1];
+                }
+                int m2 = 0;
+                for(int l2 = 0;l2 < t2->num_dim ;l2++){
+                    if(l2 != n2){
+                        m2 += index[l2 + t1->num_dim - 1] * t1->shape[l2];
+                    }else{
+                        m2 += k * t1->shape[l2];
+                    }
+
+                }
+                result->data[i] += t1->data[m1 + k] * t2->data[m2];
+            }
+        }
+
+        return result;
+    }
 }
 Tensor * slice(Tensor * t,int start[],int end[],int dim){
     if(dim!=t->num_dim){

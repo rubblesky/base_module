@@ -25,6 +25,9 @@ typedef struct VisionTransformerLayer{
     Module * ln2;
 
     Tensor * in_proj_output;
+    Tensor * in_proj_q;
+    Tensor * in_proj_k;
+    Tensor * in_proj_v;
     Tensor * out_proj_output;
     Tensor * ln1_output;
     Tensor * mlp_fc_output;
